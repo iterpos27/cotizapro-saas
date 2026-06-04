@@ -2,12 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Building2,
+  ChevronLeft,
   CheckCircle2,
   ClipboardList,
   Download,
   Edit3,
   FileText,
   LogOut,
+  Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
   Plus,
   Save,
   Send,
@@ -178,6 +182,8 @@ function AuthPage({ onLogin }) {
 }
 
 function Shell({ session, onLogout, children, active, setActive }) {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const nav = [
     { id: "dashboard", label: "Dashboard", icon: ClipboardList },
     { id: "empresa", label: "Empresa", icon: Building2 },
@@ -185,32 +191,61 @@ function Shell({ session, onLogout, children, active, setActive }) {
     { id: "cotizaciones", label: "Cotizaciones", icon: FileText },
   ];
 
+  function selectSection(sectionId) {
+    setActive(sectionId);
+    setMobileMenuOpen(false);
+  }
+
   return (
-    <main className="app-shell">
-      <aside className="sidebar">
+    <main className={`app-shell ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
+      {mobileMenuOpen ? <button className="mobile-backdrop" type="button" aria-label="Cerrar menu" onClick={() => setMobileMenuOpen(false)} /> : null}
+      <aside className={`sidebar ${mobileMenuOpen ? "mobile-open" : ""}`}>
         <div className="sidebar-brand">
-          <Building2 size={22} />
+          <span className="brand-icon">
+            <Building2 size={22} />
+          </span>
           <strong>CotizaPro</strong>
+          <button className="icon-button sidebar-close-mobile" type="button" onClick={() => setMobileMenuOpen(false)} aria-label="Cerrar menu">
+            <ChevronLeft size={18} />
+          </button>
         </div>
         <nav>
           {nav.map((item) => {
             const Icon = item.icon;
             return (
-              <button key={item.id} className={active === item.id ? "nav-item active" : "nav-item"} type="button" onClick={() => setActive(item.id)}>
+              <button key={item.id} className={active === item.id ? "nav-item active" : "nav-item"} type="button" onClick={() => selectSection(item.id)} title={item.label}>
                 <Icon size={18} />
-                {item.label}
+                <span>{item.label}</span>
               </button>
             );
           })}
         </nav>
-        <button className="nav-item logout" type="button" onClick={onLogout}>
-          <LogOut size={18} />
-          Salir
-        </button>
+        <div className="sidebar-user">
+          <div className="avatar">{session.user?.email?.slice(0, 1)?.toUpperCase() || "U"}</div>
+          <div className="sidebar-user-text">
+            <span>Cuenta</span>
+            <strong>{session.user?.email}</strong>
+          </div>
+          <button className="logout-button" type="button" onClick={onLogout} title="Salir">
+            <LogOut size={18} />
+          </button>
+        </div>
       </aside>
       <section className="workspace">
         <header className="topbar">
-          <div>
+          <div className="topbar-left">
+            <button className="icon-button mobile-menu-button" type="button" onClick={() => setMobileMenuOpen(true)} aria-label="Abrir menu">
+              <Menu size={20} />
+            </button>
+            <button className="icon-button sidebar-toggle" type="button" onClick={() => setSidebarCollapsed((current) => !current)} aria-label="Contraer menu">
+              {sidebarCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
+            </button>
+            <div>
+              <span>Modulo</span>
+              <strong>{nav.find((item) => item.id === active)?.label || "Dashboard"}</strong>
+            </div>
+          </div>
+          <div className="topbar-account">
             <span>Sesion activa</span>
             <strong>{session.user?.email}</strong>
           </div>

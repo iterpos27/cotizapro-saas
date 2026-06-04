@@ -158,16 +158,25 @@ select:focus {
 .app-shell {
   display: grid;
   min-height: 100vh;
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns: 280px minmax(0, 1fr);
+  transition: grid-template-columns 180ms ease;
+}
+
+.app-shell.sidebar-collapsed {
+  grid-template-columns: 86px minmax(0, 1fr);
 }
 
 .sidebar {
+  position: sticky;
+  top: 0;
   display: flex;
+  height: 100vh;
   flex-direction: column;
   gap: 18px;
   border-right: 1px solid var(--border);
   background: #ffffff;
-  padding: 22px;
+  padding: 18px;
+  transition: width 180ms ease, transform 180ms ease;
 }
 
 .sidebar-brand {
@@ -175,6 +184,22 @@ select:focus {
   align-items: center;
   gap: 10px;
   color: var(--primary);
+  min-height: 44px;
+}
+
+.brand-icon {
+  display: grid;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 10px;
+  background: #e6f6f3;
+}
+
+.sidebar-close-mobile {
+  display: none;
+  margin-left: auto;
 }
 
 .sidebar nav {
@@ -194,6 +219,7 @@ select:focus {
   cursor: pointer;
   padding: 11px 12px;
   text-align: left;
+  white-space: nowrap;
 }
 
 .nav-item.active,
@@ -202,22 +228,108 @@ select:focus {
   color: var(--primary);
 }
 
-.logout {
+.sidebar-collapsed .sidebar {
+  padding-inline: 14px;
+}
+
+.sidebar-collapsed .sidebar-brand strong,
+.sidebar-collapsed .nav-item span,
+.sidebar-collapsed .sidebar-user-text {
+  display: none;
+}
+
+.sidebar-collapsed .nav-item {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.sidebar-user {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 10px;
   margin-top: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 10px;
+}
+
+.avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
+  font-weight: 800;
+}
+
+.sidebar-user-text {
+  min-width: 0;
+}
+
+.sidebar-user-text span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.sidebar-user-text strong {
+  display: block;
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-button {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  color: var(--danger);
+  cursor: pointer;
+}
+
+.sidebar-collapsed .sidebar-user {
+  grid-template-columns: 1fr;
+  padding: 8px;
+}
+
+.sidebar-collapsed .logout-button {
+  width: 100%;
 }
 
 .workspace {
   min-width: 0;
-  padding: 24px;
+  padding: 22px;
 }
 
 .topbar {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 12px 14px;
+  box-shadow: 0 10px 26px rgba(16, 24, 40, 0.05);
 }
 
-.topbar div {
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-account {
   text-align: right;
 }
 
@@ -327,6 +439,18 @@ th {
   cursor: pointer;
 }
 
+.sidebar-toggle {
+  display: grid;
+}
+
+.mobile-menu-button {
+  display: none;
+}
+
+.mobile-backdrop {
+  display: none;
+}
+
 .icon-button.danger {
   color: var(--danger);
 }
@@ -366,7 +490,67 @@ th {
   }
 
   .sidebar {
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
+    position: fixed;
+    z-index: 30;
+    width: min(84vw, 320px);
+    transform: translateX(-105%);
+    box-shadow: 24px 0 60px rgba(16, 24, 40, 0.18);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close-mobile {
+    display: grid;
+  }
+
+  .sidebar-collapsed .sidebar-brand strong,
+  .sidebar-collapsed .nav-item span,
+  .sidebar-collapsed .sidebar-user-text {
+    display: block;
+  }
+
+  .sidebar-collapsed .nav-item {
+    justify-content: flex-start;
+    padding: 11px 12px;
+  }
+
+  .sidebar-collapsed .sidebar-user {
+    grid-template-columns: 38px minmax(0, 1fr) 38px;
+  }
+
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: block;
+    border: 0;
+    background: rgba(15, 23, 42, 0.38);
+  }
+
+  .mobile-menu-button {
+    display: grid;
+  }
+
+  .sidebar-toggle {
+    display: none;
+  }
+
+  .workspace {
+    padding: 14px;
+  }
+
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .topbar-account {
+    text-align: left;
+  }
+
+  .item-row {
+    grid-template-columns: 1fr;
   }
 }
