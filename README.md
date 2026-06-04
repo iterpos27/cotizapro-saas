@@ -14,6 +14,7 @@ Esta fase incluye solo backend:
 - Endpoint protegido `/api/me`.
 - CRUD de clientes por empresa.
 - CRUD de cotizaciones e items por empresa.
+- PDF de cotizacion generado desde backend.
 - Health check `/api/health`.
 
 El frontend se construira despues, cuando se indique.
@@ -68,5 +69,6 @@ GET  /api/cotizaciones/:id
 POST /api/cotizaciones
 PUT  /api/cotizaciones/:id
 PATCH /api/cotizaciones/:id/estado
+GET  /api/cotizaciones/:id/pdf
 DEL  /api/cotizaciones/:id
 ```

@@ -6,6 +6,7 @@ import {
   getEstado,
   getItemsPayload,
 } from "../services/cotizaciones.js";
+import { createCotizacionPdf } from "../services/pdfCotizacion.js";
 import { getUserContext } from "../services/userContext.js";
 import { sendError } from "../utils/http.js";
 
@@ -85,6 +86,23 @@ cotizacionesRouter.get("/", requireUser, async (request, response) => {
     response.json({ cotizaciones: data });
   } catch (error) {
     sendError(response, error);
+  }
+});
+
+cotizacionesRouter.get("/:id/pdf", requireUser, async (request, response) => {
+  try {
+    const { perfil, empresa } = await getUserContext(request);
+    const cotizacion = await getCotizacion(request, perfil.empresa_id, request.params.id);
+    const pdf = await createCotizacionPdf({ cotizacion, empresa });
+
+    response.setHeader("Content-Type", "application/pdf");
+    response.setHeader(
+      "Content-Disposition",
+      `inline; filename="cotizacion-${cotizacion.numero || cotizacion.id}.pdf"`,
+    );
+    response.send(pdf);
+  } catch (error) {
+    sendError(response, error, 404);
   }
 });
 
