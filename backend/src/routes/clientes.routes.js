@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { requireUser } from "../middleware/requireUser.js";
 import { getUserContext } from "../services/userContext.js";
+import { sendError } from "../utils/http.js";
 import { cleanText } from "../utils/text.js";
 
 export const clientesRouter = Router();
@@ -13,10 +14,6 @@ function getClientePayload(body) {
     identificacion: cleanText(body.identificacion) || null,
     direccion: cleanText(body.direccion) || null,
   };
-}
-
-function sendError(response, error, status = 500) {
-  response.status(status).json({ error: error.message || "Error del servidor." });
 }
 
 clientesRouter.get("/", requireUser, async (request, response) => {

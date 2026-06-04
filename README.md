@@ -13,6 +13,7 @@ Esta fase incluye solo backend:
 - Login.
 - Endpoint protegido `/api/me`.
 - CRUD de clientes por empresa.
+- CRUD de cotizaciones e items por empresa.
 - Health check `/api/health`.
 
 El frontend se construira despues, cuando se indique.
@@ -48,6 +49,7 @@ Ejecuta en Supabase:
 ```bash
 backend/supabase/migrations/001_empresas_perfiles.sql
 backend/supabase/migrations/002_clientes.sql
+backend/supabase/migrations/003_cotizaciones.sql
 ```
 
 ## Endpoints iniciales
@@ -61,4 +63,10 @@ GET  /api/clientes
 POST /api/clientes
 PUT  /api/clientes/:id
 DEL  /api/clientes/:id
+GET  /api/cotizaciones
+GET  /api/cotizaciones/:id
+POST /api/cotizaciones
+PUT  /api/cotizaciones/:id
+PATCH /api/cotizaciones/:id/estado
+DEL  /api/cotizaciones/:id
 ```
