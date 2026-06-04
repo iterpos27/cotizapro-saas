@@ -114,6 +114,11 @@ button {
   color: var(--foreground);
 }
 
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
 .auth-stack {
   width: min(100%, 430px);
 }
@@ -231,6 +236,12 @@ button {
   padding: 18px max(24px, calc((100vw - 1180px) / 2));
 }
 
+.topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .topbar p {
   margin: 0 0 4px;
   color: var(--muted);
@@ -253,6 +264,10 @@ button {
 
 .panel {
   padding: 28px;
+}
+
+.panel-action {
+  margin-top: 12px;
 }
 
 .panel.narrow {
@@ -285,9 +300,107 @@ button {
   overflow-wrap: anywhere;
 }
 
+.clients-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.85fr) minmax(0, 1.4fr);
+  gap: 24px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.clients-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.full-field {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-header p {
+  margin-bottom: 0;
+}
+
+.table-wrap {
+  width: 100%;
+  margin-top: 22px;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th,
+.data-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 14px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.data-table td strong,
+.data-table td span {
+  display: block;
+}
+
+.data-table td span {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--foreground);
+  cursor: pointer;
+}
+
+.icon-button.danger {
+  color: var(--danger);
+}
+
+.empty-cell {
+  color: var(--muted);
+  text-align: center;
+}
+
 @media (max-width: 780px) {
   .dashboard-grid,
-  .stats {
+  .stats,
+  .clients-layout,
+  .clients-form {
     grid-template-columns: 1fr;
   }
 

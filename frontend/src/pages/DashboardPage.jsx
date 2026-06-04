@@ -1,6 +1,6 @@
 import { LogOut, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { apiFetch } from "../lib/api.js";
 import { hasSupabaseConfig, supabase } from "../lib/supabase.js";
 
@@ -106,7 +106,10 @@ export function DashboardPage() {
             <Users size={22} />
           </div>
           <h2>Siguiente fase</h2>
-          <p>Cuando registro, login y dashboard esten probados, avanzamos a clientes.</p>
+          <p>Clientes ya esta listo para crear, listar, editar y eliminar registros de la empresa actual.</p>
+          <Link className="button primary panel-action" to="/clientes">
+            Abrir clientes
+          </Link>
         </article>
       </section>
     </main>

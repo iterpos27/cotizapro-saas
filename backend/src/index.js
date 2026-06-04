@@ -46,12 +46,19 @@ async function requireUser(request, response, next) {
     return;
   }
 
+  request.supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    global: {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  });
   request.user = data.user;
   next();
 }
 
-app.get("/api/me", requireUser, async (request, response) => {
-  const { data: perfil, error: perfilError } = await supabase
+async function getUserContext(request, response) {
+  const { data: perfil, error: perfilError } = await request.supabase
     .from("perfiles")
     .select("id, empresa_id, nombre, rol")
     .eq("id", request.user.id)
@@ -59,10 +66,10 @@ app.get("/api/me", requireUser, async (request, response) => {
 
   if (perfilError) {
     response.status(404).json({ error: "Perfil no encontrado para el usuario." });
-    return;
+    return null;
   }
 
-  const { data: empresa, error: empresaError } = await supabase
+  const { data: empresa, error: empresaError } = await request.supabase
     .from("empresas")
     .select("id, nombre, logo_url")
     .eq("id", perfil.empresa_id)
@@ -70,6 +77,30 @@ app.get("/api/me", requireUser, async (request, response) => {
 
   if (empresaError) {
     response.status(404).json({ error: "Empresa no encontrada para el usuario." });
+    return null;
+  }
+
+  return { perfil, empresa };
+}
+
+function cleanText(value) {
+  return String(value || "").trim();
+}
+
+function getClientePayload(body) {
+  return {
+    nombre: cleanText(body.nombre),
+    email: cleanText(body.email) || null,
+    telefono: cleanText(body.telefono) || null,
+    identificacion: cleanText(body.identificacion) || null,
+    direccion: cleanText(body.direccion) || null,
+  };
+}
+
+app.get("/api/me", requireUser, async (request, response) => {
+  const context = await getUserContext(request, response);
+
+  if (!context) {
     return;
   }
 
@@ -78,9 +109,112 @@ app.get("/api/me", requireUser, async (request, response) => {
       id: request.user.id,
       email: request.user.email,
     },
-    perfil,
-    empresa,
+    perfil: context.perfil,
+    empresa: context.empresa,
   });
+});
+
+app.get("/api/clientes", requireUser, async (request, response) => {
+  const context = await getUserContext(request, response);
+
+  if (!context) {
+    return;
+  }
+
+  const { data, error } = await request.supabase
+    .from("clientes")
+    .select("id, nombre, email, telefono, identificacion, direccion, created_at")
+    .eq("empresa_id", context.perfil.empresa_id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    response.status(500).json({ error: error.message });
+    return;
+  }
+
+  response.json({ clientes: data });
+});
+
+app.post("/api/clientes", requireUser, async (request, response) => {
+  const context = await getUserContext(request, response);
+
+  if (!context) {
+    return;
+  }
+
+  const payload = getClientePayload(request.body);
+
+  if (!payload.nombre) {
+    response.status(400).json({ error: "El nombre del cliente es obligatorio." });
+    return;
+  }
+
+  const { data, error } = await request.supabase
+    .from("clientes")
+    .insert({
+      ...payload,
+      empresa_id: context.perfil.empresa_id,
+    })
+    .select("id, nombre, email, telefono, identificacion, direccion, created_at")
+    .single();
+
+  if (error) {
+    response.status(500).json({ error: error.message });
+    return;
+  }
+
+  response.status(201).json({ cliente: data });
+});
+
+app.put("/api/clientes/:id", requireUser, async (request, response) => {
+  const context = await getUserContext(request, response);
+
+  if (!context) {
+    return;
+  }
+
+  const payload = getClientePayload(request.body);
+
+  if (!payload.nombre) {
+    response.status(400).json({ error: "El nombre del cliente es obligatorio." });
+    return;
+  }
+
+  const { data, error } = await request.supabase
+    .from("clientes")
+    .update(payload)
+    .eq("id", request.params.id)
+    .eq("empresa_id", context.perfil.empresa_id)
+    .select("id, nombre, email, telefono, identificacion, direccion, created_at")
+    .single();
+
+  if (error) {
+    response.status(500).json({ error: error.message });
+    return;
+  }
+
+  response.json({ cliente: data });
+});
+
+app.delete("/api/clientes/:id", requireUser, async (request, response) => {
+  const context = await getUserContext(request, response);
+
+  if (!context) {
+    return;
+  }
+
+  const { error } = await request.supabase
+    .from("clientes")
+    .delete()
+    .eq("id", request.params.id)
+    .eq("empresa_id", context.perfil.empresa_id);
+
+  if (error) {
+    response.status(500).json({ error: error.message });
+    return;
+  }
+
+  response.status(204).send();
 });
 
 const __filename = fileURLToPath(import.meta.url);

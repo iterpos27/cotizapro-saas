@@ -12,6 +12,7 @@ Esta base cubre:
 - Creacion automatica de empresa y perfil mediante trigger SQL.
 - Dashboard protegido con datos del usuario, perfil y empresa.
 - API Express protegida por token en `/api/me`.
+- Modulo de clientes con CRUD completo en `/clientes`.
 - Migracion inicial para `empresas` y `perfiles`.
 
 ## Configuracion local
@@ -33,10 +34,11 @@ PORT=4000
 FRONTEND_URL=http://localhost:5173
 ```
 
-3. Ejecuta en Supabase el SQL de:
+3. Ejecuta en Supabase los SQL de:
 
 ```bash
 supabase/migrations/001_empresas_perfiles.sql
+supabase/migrations/002_clientes.sql
 ```
 
 4. Inicia frontend y backend:

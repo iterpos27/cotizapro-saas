@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./ui/AppLayout.jsx";
+import { ClientesPage } from "./pages/ClientesPage.jsx";
 import { DashboardPage } from "./pages/DashboardPage.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import { LoginPage } from "./pages/LoginPage.jsx";
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/login" element={<LoginPage />} />
           <Route path="/registro" element={<RegisterPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/clientes" element={<ClientesPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
