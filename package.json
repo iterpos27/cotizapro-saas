@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:frontend": "vite frontend --host 0.0.0.0",
+    "dev:frontend": "vite",
     "dev:backend": "node --watch backend/src/index.js",
-    "build": "vite build frontend",
+    "build": "vite build",
     "start": "node backend/src/index.js",
-    "check": "node --check backend/src/index.js && vite build frontend"
+    "check": "node --check backend/src/index.js && vite build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
