@@ -6,8 +6,8 @@ SaaS multi-tenant para cotizaciones usando React, Vite, Node.js, Express y Supab
 
 Esta base cubre:
 
-- Frontend React rapido con Vite.
-- Backend Node.js + Express.
+- Frontend React rapido con Vite en `frontend/`.
+- Backend Node.js + Express en `backend/`.
 - Registro, login y logout con Supabase Auth.
 - Creacion automatica de empresa y perfil mediante trigger SQL.
 - Dashboard protegido con datos del usuario, perfil y empresa.
@@ -30,6 +30,7 @@ VITE_SUPABASE_ANON_KEY=
 SUPABASE_URL=
 SUPABASE_ANON_KEY=
 PORT=4000
+FRONTEND_URL=http://localhost:5173
 ```
 
 3. Ejecuta en Supabase el SQL de:

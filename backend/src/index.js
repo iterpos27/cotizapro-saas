@@ -14,7 +14,7 @@ const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
+app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }));
 app.use(express.json());
 
 app.get("/api/health", (_request, response) => {
@@ -85,11 +85,11 @@ app.get("/api/me", requireUser, async (request, response) => {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const clientDistPath = path.resolve(__dirname, "../../client/dist");
+const frontendDistPath = path.resolve(__dirname, "../../frontend/dist");
 
-app.use(express.static(clientDistPath));
+app.use(express.static(frontendDistPath));
 app.get("*", (_request, response) => {
-  response.sendFile(path.join(clientDistPath, "index.html"));
+  response.sendFile(path.join(frontendDistPath, "index.html"));
 });
 
 app.listen(port, () => {

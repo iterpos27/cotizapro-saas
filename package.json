@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:client": "vite client --host 0.0.0.0",
-    "dev:server": "node --watch server/src/index.js",
-    "build": "vite build client",
-    "start": "node server/src/index.js",
-    "check": "node --check server/src/index.js && vite build client"
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "vite frontend --host 0.0.0.0",
+    "dev:backend": "node --watch backend/src/index.js",
+    "build": "vite build frontend",
+    "start": "node backend/src/index.js",
+    "check": "node --check backend/src/index.js && vite build frontend"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
