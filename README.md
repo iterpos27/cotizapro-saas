@@ -1,10 +1,10 @@
 # CotizaPro SaaS
 
-Backend primero para el SaaS multi-tenant de cotizaciones.
+SaaS multi-tenant de cotizaciones.
 
 ## Estado actual
 
-Esta fase incluye solo backend:
+Esta fase incluye backend y frontend inicial:
 
 - Node.js + Express.
 - Conexion con Supabase.
@@ -18,13 +18,21 @@ Esta fase incluye solo backend:
 - PDF de cotizacion generado desde backend.
 - Coleccion Postman para pruebas con datos reales.
 - Health check `/api/health`.
-
-El frontend se construira despues, cuando se indique.
+- Frontend React + Vite para auth, empresa, clientes y cotizaciones.
 
 ## Configuracion
 
 ```bash
 cd backend
+npm install
+copy .env.example .env
+npm run dev
+```
+
+En otra terminal:
+
+```bash
+cd frontend
 npm install
 copy .env.example .env
 npm run dev
@@ -36,6 +44,12 @@ Backend local:
 http://localhost:4000
 ```
 
+Frontend local:
+
+```bash
+http://localhost:5173
+```
+
 ## Variables
 
 ```bash
@@ -43,6 +57,12 @@ SUPABASE_URL=
 SUPABASE_ANON_KEY=
 PORT=4000
 CLIENT_URL=http://localhost:5173
+```
+
+Frontend:
+
+```bash
+VITE_API_URL=http://localhost:4000
 ```
 
 ## Base de datos
