@@ -39,7 +39,13 @@ export function createCotizacionPdf({ cotizacion, empresa }) {
   });
 
   document.font("Helvetica-Bold").fontSize(20).text(empresa.nombre || "Empresa", 48, 48);
-  document.font("Helvetica").fontSize(10).fillColor("#64748b").text("Cotizacion", 48, 76);
+  document.font("Helvetica").fontSize(10).fillColor("#64748b").text(empresa.razon_social || "Cotizacion", 48, 76);
+  if (empresa.ruc) {
+    document.text(`RUC: ${empresa.ruc}`, 48, 92);
+  }
+  if (empresa.direccion) {
+    document.text(empresa.direccion, 48, 108, { width: 260 });
+  }
 
   document.fillColor("#111827").font("Helvetica-Bold").fontSize(16).text(`Cotizacion #${cotizacion.numero}`, 360, 48, {
     width: 180,

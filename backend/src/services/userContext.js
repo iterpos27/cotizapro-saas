@@ -11,7 +11,7 @@ export async function getUserContext(request) {
 
   const { data: empresa, error: empresaError } = await request.supabase
     .from("empresas")
-    .select("id, nombre, logo_url")
+    .select("id, nombre, ruc, razon_social, direccion, telefono, email, logo_url")
     .eq("id", perfil.empresa_id)
     .single();
 

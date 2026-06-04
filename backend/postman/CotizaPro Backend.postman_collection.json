@@ -1,0 +1,189 @@
+{
+  "info": {
+    "name": "CotizaPro Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:4000" },
+    { "key": "token", "value": "" },
+    { "key": "email", "value": "usuario@empresa.com" },
+    { "key": "password", "value": "123456" },
+    { "key": "cliente_id", "value": "" },
+    { "key": "cotizacion_id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/health"
+      }
+    },
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Iter Posligua\",\n  \"empresa\": \"IPS TECH\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+        },
+        "url": "{{base_url}}/api/auth/register"
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.session && json.session.access_token) {",
+              "  pm.collectionVariables.set('token', json.session.access_token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+        },
+        "url": "{{base_url}}/api/auth/login"
+      }
+    },
+    {
+      "name": "Me",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/api/me"
+      }
+    },
+    {
+      "name": "Empresa - Ver",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/api/empresa"
+      }
+    },
+    {
+      "name": "Empresa - Actualizar",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"IPS TECH\",\n  \"razon_social\": \"IPS TECH S.A.S.\",\n  \"ruc\": \"0999999999001\",\n  \"direccion\": \"Guayaquil, Ecuador\",\n  \"telefono\": \"0999999999\",\n  \"email\": \"ventas@ipstech.ec\",\n  \"logo_url\": \"https://example.com/logo.png\"\n}"
+        },
+        "url": "{{base_url}}/api/empresa"
+      }
+    },
+    {
+      "name": "Clientes - Crear",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.cliente && json.cliente.id) {",
+              "  pm.collectionVariables.set('cliente_id', json.cliente.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Cliente de prueba\",\n  \"email\": \"cliente@correo.com\",\n  \"telefono\": \"0988888888\",\n  \"identificacion\": \"0912345678\",\n  \"direccion\": \"Guayaquil\"\n}"
+        },
+        "url": "{{base_url}}/api/clientes"
+      }
+    },
+    {
+      "name": "Clientes - Listar",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/api/clientes"
+      }
+    },
+    {
+      "name": "Cotizaciones - Crear",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.cotizacion && json.cotizacion.id) {",
+              "  pm.collectionVariables.set('cotizacion_id', json.cotizacion.id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente_id\": \"{{cliente_id}}\",\n  \"fecha\": \"2026-06-04\",\n  \"vencimiento\": \"2026-06-14\",\n  \"estado\": \"borrador\",\n  \"notas\": \"Cotizacion de prueba\",\n  \"items\": [\n    {\n      \"descripcion\": \"Servicio de implementacion\",\n      \"cantidad\": 1,\n      \"precio_unitario\": 250\n    },\n    {\n      \"descripcion\": \"Soporte mensual\",\n      \"cantidad\": 2,\n      \"precio_unitario\": 50\n    }\n  ]\n}"
+        },
+        "url": "{{base_url}}/api/cotizaciones"
+      }
+    },
+    {
+      "name": "Cotizaciones - Listar",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/api/cotizaciones"
+      }
+    },
+    {
+      "name": "Cotizaciones - Cambiar Estado",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"enviada\"\n}"
+        },
+        "url": "{{base_url}}/api/cotizaciones/{{cotizacion_id}}/estado"
+      }
+    },
+    {
+      "name": "Cotizaciones - PDF",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{base_url}}/api/cotizaciones/{{cotizacion_id}}/pdf"
+      }
+    }
+  ]
+}

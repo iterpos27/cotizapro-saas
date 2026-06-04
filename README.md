@@ -12,9 +12,11 @@ Esta fase incluye solo backend:
 - Registro de usuario y empresa.
 - Login.
 - Endpoint protegido `/api/me`.
+- Datos fiscales de empresa.
 - CRUD de clientes por empresa.
 - CRUD de cotizaciones e items por empresa.
 - PDF de cotizacion generado desde backend.
+- Coleccion Postman para pruebas con datos reales.
 - Health check `/api/health`.
 
 El frontend se construira despues, cuando se indique.
@@ -51,7 +53,18 @@ Ejecuta en Supabase:
 backend/supabase/migrations/001_empresas_perfiles.sql
 backend/supabase/migrations/002_clientes.sql
 backend/supabase/migrations/003_cotizaciones.sql
+backend/supabase/migrations/004_empresa_datos_fiscales.sql
 ```
+
+## Pruebas con Postman
+
+Importa:
+
+```bash
+backend/postman/CotizaPro Backend.postman_collection.json
+```
+
+Sigue el orden recomendado en `backend/postman/README.md`.
 
 ## Endpoints iniciales
 
@@ -60,6 +73,8 @@ GET  /api/health
 POST /api/auth/register
 POST /api/auth/login
 GET  /api/me
+GET  /api/empresa
+PUT  /api/empresa
 GET  /api/clientes
 POST /api/clientes
 PUT  /api/clientes/:id
