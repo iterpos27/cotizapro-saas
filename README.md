@@ -1,19 +1,20 @@
 # CotizaPro SaaS
 
-SaaS multi-tenant para cotizaciones usando Next.js, Tailwind, shadcn/ui y Supabase.
+SaaS multi-tenant para cotizaciones usando React, Vite, Node.js, Express y Supabase.
 
 ## Fase actual
 
 Esta base cubre:
 
-- Proyecto Next.js con Tailwind 4.
-- Estructura compatible con shadcn/ui.
-- Cliente Supabase para servidor, navegador y middleware.
-- Registro de usuario con nombre de empresa.
-- Login, logout y dashboard protegido.
-- Migración inicial para `empresas` y `perfiles`.
+- Frontend React rapido con Vite.
+- Backend Node.js + Express.
+- Registro, login y logout con Supabase Auth.
+- Creacion automatica de empresa y perfil mediante trigger SQL.
+- Dashboard protegido con datos del usuario, perfil y empresa.
+- API Express protegida por token en `/api/me`.
+- Migracion inicial para `empresas` y `perfiles`.
 
-## Configuración local
+## Configuracion local
 
 1. Instala dependencias:
 
@@ -21,20 +22,38 @@ Esta base cubre:
 npm install
 ```
 
-2. Copia `.env.example` a `.env.local` y coloca tus credenciales de Supabase:
+2. Copia `.env.example` a `.env.local` y coloca tus credenciales:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+PORT=4000
 ```
 
-3. Ejecuta en Supabase el SQL de `supabase/migrations/001_empresas_perfiles.sql`.
+3. Ejecuta en Supabase el SQL de:
 
-4. Inicia el proyecto:
+```bash
+supabase/migrations/001_empresas_perfiles.sql
+```
+
+4. Inicia frontend y backend:
 
 ```bash
 npm run dev
 ```
+
+Frontend: `http://localhost:5173`
+
+Backend: `http://localhost:4000`
+
+## Supabase Auth
+
+Si aparece `Email not confirmed`, tienes dos opciones:
+
+- Confirmar el correo del usuario.
+- Para pruebas, ir a Supabase: `Authentication > Sign In / Providers > Email` y desactivar `Confirm email`.
 
 ## Regla multi-tenant
 
